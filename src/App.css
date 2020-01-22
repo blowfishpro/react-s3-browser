@@ -1,32 +1,161 @@
-.App {
-  text-align: center;
+.file-size {
+  float: right;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
+.file-size__number {
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.file-size__suffix {
+  display: inline-block;
+  width: 2em;
+  padding-left: 0.25em;
 }
 
-.App-link {
-  color: #61dafb;
+/* adapted from https://loading.io/css/ */
+.loading {
+  width: 100%;
+  height: 100%;
 }
 
-@keyframes App-logo-spin {
-  from {
+.loading:after {
+  content: " ";
+  display: block;
+  width: 8em;
+  height: 8em;
+  margin: auto;
+  border-radius: 50%;
+  border: 1.5em solid #000;
+  border-color: #000 transparent #000 transparent;
+  animation: loading 1.2s linear infinite;
+}
+
+@keyframes loading {
+  0% {
     transform: rotate(0deg);
   }
-  to {
+  100% {
     transform: rotate(360deg);
   }
+}
+
+.objects-table {
+  margin: 0.5em;
+}
+
+.objects-table table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.objects-table thead {
+  background: #DDD;
+  border-top: 0.25em;
+}
+
+.objects-table thead td {
+  padding: 0.5em;
+}
+
+.objects-table tbody > tr:nth-child(even) {
+  background: #EEE;
+}
+
+.objects-table tbody > tr:hover {
+  background: #FFD;
+}
+
+.objects-table tbody td {
+  padding: 0.2em;
+}
+
+.objects-table .column_name {
+}
+
+.objects-table .column_last-modified {
+  width: 15em;
+}
+
+.objects-table .column_size {
+  width: 15em;
+}
+
+.path-navigation {
+  padding: 0.5em;
+}
+
+.path-separator {
+  padding-left: 0.25em;
+  padding-right: 0.25em;
+}
+
+.search-bar {
+  margin: 0.5em;
+}
+
+.search-bar > input {
+  box-sizing: border-box;
+  font-size: 1em;
+  width: 100%;
+}
+
+.sort-none,
+.sort-asc,
+.sort-desc {
+  position: relative;
+  float: right;
+  width: 1.25em;
+  height: 1.25em;
+}
+
+.sort-none:before,
+.sort-none:after,
+.sort-asc:before,
+.sort-desc:before {
+    position: absolute;
+    display: block;
+    content: "";
+    border: 0.35em solid transparent;
+}
+
+.sort-none:before {
+    top: 0.6em;
+    border-top-color: #000;
+}
+
+.sort-none:after {
+    top: -0.15em;
+    border-bottom-color: #000;
+}
+
+.sort-none:hover:before {
+    top: 0.65em;
+    left: -0.05em;
+    border-width: 0.4em;
+}
+
+.sort-none:hover:after {
+    top: -0.25em;
+    left: -0.05em;
+    border-width: 0.4em;
+}
+
+.sort-asc:before {
+    top: 0.1em;
+    border-bottom-color: #000;
+}
+
+.sort-desc:before {
+    top: 0.4em;
+    border-top-color: #000;
+}
+
+.sort-asc:hover:before,
+.sort-desc:hover:before {
+    left: -0.05em;
+    border-width: 0.4em;
+}
+
+a {
+  color: #33F;
+  text-decoration: none;
 }
