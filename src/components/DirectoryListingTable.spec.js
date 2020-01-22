@@ -54,7 +54,7 @@ describe(DirectoryListingTable, () => {
     ]
     const wrapper = shallow(
       <DirectoryListingTable
-        headerSortClasses={{}}
+        headerSortClasses={{ name: 'a', lastModified: 'b', size: 'c' }}
         items={items}
       />
     );

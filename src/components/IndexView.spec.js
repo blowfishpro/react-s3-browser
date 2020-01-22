@@ -9,14 +9,14 @@ import SearchResultsTable from './SearchResultsTable';
 
 describe(IndexView, () => {
   it('renders a path navigation', () => {
-    const node = { some: 'stuff' };
+    const node = { name: 'stuff', key: 'stuff', children: [] };
     const wrapper = shallow(
       <IndexView
         node={node}
         sortStore={{}}
-        sortClassDeterminator={jest.fn()}
+        sortClassDeterminator={jest.fn().mockReturnValue({ name: 'a', lastModified: 'b', size: 'c' })}
         searchFilter={jest.fn()}
-        sortItems={jest.fn()}
+        sortItems={jest.fn().mockReturnValue([])}
       />
     );
 
@@ -27,14 +27,14 @@ describe(IndexView, () => {
 
   describe('search bar', () => {
     it('gives the node name if the node has a parent', () => {
-      const node = { name: 'some node', parent: {} };
+      const node = { name: 'some node', key: 'stuff', parent: {}, children: [] };
       const wrapper = shallow(
         <IndexView
           node={node}
           sortStore={{}}
-          sortClassDeterminator={jest.fn()}
+          sortClassDeterminator={jest.fn().mockReturnValue({ name: 'a', lastModified: 'b', size: 'c' })}
           searchFilter={jest.fn()}
-          sortItems={jest.fn()}
+          sortItems={jest.fn().mockReturnValue([])}
         />
       );
       const searchBar = wrapper.find(SearchBar);
@@ -43,14 +43,14 @@ describe(IndexView, () => {
     });
 
     it('does not give the node name if the node has no parent', () => {
-      const node = { name: 'some node' };
+      const node = { name: '', key: '/', children: [] };
       const wrapper = shallow(
         <IndexView
           node={node}
           sortStore={{}}
-          sortClassDeterminator={jest.fn()}
+          sortClassDeterminator={jest.fn().mockReturnValue({ name: 'a', lastModified: 'b', size: 'c' })}
           searchFilter={jest.fn()}
-          sortItems={jest.fn()}
+          sortItems={jest.fn().mockReturnValue([])}
         />
       );
       const searchBar = wrapper.find(SearchBar);
@@ -59,14 +59,14 @@ describe(IndexView, () => {
     });
 
     it('changes the search term when a change is triggered', () => {
-      const node = { name: 'some node' };
+      const node = { name: 'stuff', key: 'stuff', children: [] };
       const wrapper = shallow(
         <IndexView
           node={node}
           sortStore={{}}
-          sortClassDeterminator={jest.fn()}
-          searchFilter={jest.fn()}
-          sortItems={jest.fn()}
+          sortClassDeterminator={jest.fn().mockReturnValue({ name: 'a', lastModified: 'b', size: 'c' })}
+          searchFilter={jest.fn().mockReturnValue([])}
+          sortItems={jest.fn().mockReturnValue([])}
         />
       );
       let searchBar = wrapper.find(SearchBar);
@@ -82,11 +82,19 @@ describe(IndexView, () => {
   });
 
   it('renders a directory listing table if no search term is specified', () => {
-    const node = { children: ['child1', 'child2'] };
+    const children = [
+      { key: 'child0key', name: 'child0name', size: 0 },
+      { key: 'child1key', name: 'child1name', size: 1 },
+    ];
+    const sortedChildren = [
+      { key: 'sorted0key', name: 'sorted0name', size: 0 },
+      { key: 'sorted1key', name: 'sorted1name', size: 1 },
+    ];
+    const node = { name: 'stuff', key: 'stuff', children };
     const sortItems = Sinon.stub();
-    sortItems.withArgs(['child1', 'child2'], 'someSortBy', 'someSortOrder').returns(['sorted1', 'sorted2']);
+    sortItems.withArgs(children, 'someSortBy', 'someSortOrder').returns(sortedChildren);
     const sortClassDeterminator = Sinon.stub();
-    sortClassDeterminator.withArgs('someSortBy', 'someSortOrder').returns({ sort: 'classes' });
+    sortClassDeterminator.withArgs('someSortBy', 'someSortOrder').returns({ name: 'a', lastModified: 'b', size: 'c' });
     const sortStore = { sortBy: 'someSortBy', sortOrder: 'someSortOrder', changeSort: jest.fn() };
     const wrapper = shallow(
       <IndexView
@@ -101,8 +109,8 @@ describe(IndexView, () => {
     const directoryListingTable = wrapper.find(DirectoryListingTable);
     expect(directoryListingTable).toHaveLength(1);
     expect(directoryListingTable).toHaveProp({
-      items: ['sorted1', 'sorted2'],
-      headerSortClasses: { sort: 'classes' },
+      items: sortedChildren,
+      headerSortClasses: { name: 'a', lastModified: 'b', size: 'c' },
     });
 
     directoryListingTable.props().changeSort('newSortBy');
@@ -110,16 +118,34 @@ describe(IndexView, () => {
   });
 
   it('renders a search results table if no search term is specified', () => {
-    const node = { some: 'stuff' };
+    const node = { name: 'stuff', key: 'stuff', children: [] };
+    const filteredItems = [
+      {
+        node: {
+          key: 'item0',
+          lastModified: new Date('2000-01-01 00:00:00 +0000'),
+          size: 0,
+        },
+        matchData: ['matchData0'],
+      },
+      {
+        node: {
+          key: 'item1',
+          lastModified: new Date('2000-01-01 00:00:01 +0000'),
+          size: 1,
+        },
+        matchData: ['matchData1'],
+      },
+    ];
     const searchFilter = Sinon.stub();
-    searchFilter.withArgs('search term', node).returns(['item1', 'item2']);
+    searchFilter.withArgs('search term', node).returns(filteredItems);
     const wrapper = shallow(
       <IndexView
         node={node}
         sortStore={{}}
-        sortClassDeterminator={jest.fn()}
+        sortClassDeterminator={jest.fn().mockReturnValue({ name: 'a', lastModified: 'b', size: 'c' })}
         searchFilter={searchFilter}
-        sortItems={jest.fn()}
+        sortItems={jest.fn().mockReturnValue([])}
       />
     );
 
@@ -127,6 +153,6 @@ describe(IndexView, () => {
 
     const searchResultsTable = wrapper.find(SearchResultsTable);
     expect(searchResultsTable).toHaveLength(1);
-    expect(searchResultsTable).toHaveProp({ items: ['item1', 'item2'] });
+    expect(searchResultsTable).toHaveProp({ items: filteredItems });
   });
 });

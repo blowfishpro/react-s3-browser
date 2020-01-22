@@ -1,9 +1,21 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import FileSize from './FileSize';
 import NodeLink from './NodeLink';
 import SearchResultTitle from './SearchResultTitle';
 
 export default class SearchResultsTable extends Component {
+  static propTypes = {
+    items: PropTypes.arrayOf(PropTypes.shape({
+      node: PropTypes.shape({
+        key: PropTypes.string.isRequired,
+        lastModified: PropTypes.instanceOf(Date).isRequired,
+        size: PropTypes.number.isRequired,
+      }).isRequired,
+      matchData: PropTypes.array.isRequired,
+    }).isRequired).isRequired
+  }
+
   render() {
     const { items } = this.props;
 

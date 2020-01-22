@@ -7,14 +7,14 @@ import IndexView from './IndexView';
 describe(DirectoriesRouter, () => {
   it('renders', () => {
     const directories = [
-      { key: 'a', path: '/a' },
-      { key: 'b', path: '/b' },
-      { key: 'c', path: '/c' },
+      { key: 'a', path: '/a', name: 'a', children: [] },
+      { key: 'b', path: '/b', name: 'b', children: [] },
+      { key: 'c', path: '/c', name: 'c', children: [] },
     ];
     const sortStore = { name: 'sortStore' };
-    const sortClassDeterminator = { name: 'sortClassDeterminator' };
-    const searchFilter = { name: 'searchFilter' };
-    const sortItems = { name: 'sortItems' };
+    const sortClassDeterminator = jest.fn();
+    const searchFilter = jest.fn();
+    const sortItems = jest.fn();
     const wrapper = shallow(
       <DirectoriesRouter
         directories={directories}

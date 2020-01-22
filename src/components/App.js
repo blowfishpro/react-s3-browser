@@ -1,9 +1,22 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
 import DirectoriesRouter from './DirectoriesRouter';
 import '../App.css';
 
 export default @observer class App extends Component {
+  static propTypes = {
+    sortStore: PropTypes.object,
+    directoriesStore: PropTypes.shape({
+      hasDirectories: PropTypes.bool.isRequired,
+      error: PropTypes.bool.isRequired,
+      directories: PropTypes.array,
+    }).isRequired,
+    sortClassDeterminator: PropTypes.func,
+    searchFilter: PropTypes.func,
+    sortItems: PropTypes.func,
+  }
+
   render() {
     const {
       sortStore,

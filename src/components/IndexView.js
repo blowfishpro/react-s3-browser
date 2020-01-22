@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { observer } from 'mobx-react';
 import SearchBar from './SearchBar';
 import DirectoryListingTable from './DirectoryListingTable';
@@ -6,6 +7,14 @@ import SearchResultsTable from './SearchResultsTable';
 import PathNavigation from './PathNavigation';
 
 export default @observer class IndexView extends Component {
+  static propTypes = {
+    node: PropTypes.shape({
+      children: PropTypes.array.isRequired,
+      parent: PropTypes.object,
+      name: PropTypes.string.isRequired,
+    }).isRequired,
+  }
+
   constructor() {
     super(...arguments);
     this.state = {

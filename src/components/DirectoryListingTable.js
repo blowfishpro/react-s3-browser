@@ -1,9 +1,23 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import FileSize from './FileSize';
 import NodeLink from './NodeLink';
 
 export default class DirectoryListingTable extends Component {
+  static propTypes = {
+    items: PropTypes.arrayOf(PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      size: PropTypes.number.isRequired,
+    }).isRequired).isRequired,
+    headerSortClasses: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      lastModified: PropTypes.string.isRequired,
+      size: PropTypes.string.isRequired,
+    }).isRequired,
+  }
+
   render() {
     const { items, headerSortClasses, changeSort } = this.props;
 

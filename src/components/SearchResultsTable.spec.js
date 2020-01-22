@@ -20,9 +20,18 @@ describe(SearchResultsTable, () => {
 
   it('renders a body row for each item', () => {
     const items = [
-      { node: { name: 'item0', key: 'item0', size: 10, lastModified: new Date('2000-01-01 00:00:00 +0000') }, matchData: 'matchData0' },
-      { node: { name: 'item1', key: 'item1', size: 11, lastModified: new Date('2000-01-01 00:00:01 +0000') }, matchData: 'matchData1' },
-      { node: { name: 'item2', key: 'item2', size: 12, lastModified: new Date('2000-01-01 00:00:02 +0000') }, matchData: 'matchData2' },
+      {
+        node: { name: 'item0', key: 'item0', size: 10, lastModified: new Date('2000-01-01 00:00:00 +0000') },
+        matchData: [[{ fragment: 'matchData0', match: false }]],
+      },
+      {
+        node: { name: 'item1', key: 'item1', size: 11, lastModified: new Date('2000-01-01 00:00:01 +0000') },
+        matchData: [[{ fragment: 'matchData1', match: false }]],
+      },
+      {
+        node: { name: 'item2', key: 'item2', size: 12, lastModified: new Date('2000-01-01 00:00:02 +0000') },
+        matchData: [[{ fragment: 'matchData2', match: false }]],
+      },
     ]
     const wrapper = shallow(
       <SearchResultsTable
@@ -37,7 +46,7 @@ describe(SearchResultsTable, () => {
     expect(cells0.at(0).find(NodeLink)).toHaveLength(1);
     expect(cells0.at(0).find(NodeLink)).toHaveProp({ node: items[0].node });
     expect(cells0.at(0).find(NodeLink).find(SearchResultTitle)).toHaveLength(1);
-    expect(cells0.at(0).find(NodeLink).find(SearchResultTitle)).toHaveProp({ matchData: 'matchData0' });
+    expect(cells0.at(0).find(NodeLink).find(SearchResultTitle)).toHaveProp({ matchData: items[0].matchData });
     expect(cells0.at(1)).toHaveText(new Date('2000-01-01 00:00:00 +0000').toLocaleString());
     expect(cells0.at(2).find(FileSize)).toHaveLength(1);
     expect(cells0.at(2).find(FileSize)).toHaveProp({ size: 10 });
@@ -47,7 +56,7 @@ describe(SearchResultsTable, () => {
     expect(cells1.at(0).find(NodeLink)).toHaveLength(1);
     expect(cells1.at(0).find(NodeLink)).toHaveProp({ node: items[1].node });
     expect(cells1.at(0).find(NodeLink).find(SearchResultTitle)).toHaveLength(1);
-    expect(cells1.at(0).find(NodeLink).find(SearchResultTitle)).toHaveProp({ matchData: 'matchData1' });
+    expect(cells1.at(0).find(NodeLink).find(SearchResultTitle)).toHaveProp({ matchData: items[1].matchData });
     expect(cells1.at(1)).toHaveText(new Date('2000-01-01 00:00:01 +0000').toLocaleString());
     expect(cells1.at(2).find(FileSize)).toHaveLength(1);
     expect(cells1.at(2).find(FileSize)).toHaveProp({ size: 11 });
@@ -57,7 +66,7 @@ describe(SearchResultsTable, () => {
     expect(cells2.at(0).find(NodeLink)).toHaveLength(1);
     expect(cells2.at(0).find(NodeLink)).toHaveProp({ node: items[2].node });
     expect(cells2.at(0).find(NodeLink).find(SearchResultTitle)).toHaveLength(1);
-    expect(cells2.at(0).find(NodeLink).find(SearchResultTitle)).toHaveProp({ matchData: 'matchData2' });
+    expect(cells2.at(0).find(NodeLink).find(SearchResultTitle)).toHaveProp({ matchData: items[2].matchData });
     expect(cells2.at(1)).toHaveText(new Date('2000-01-01 00:00:02 +0000').toLocaleString());
     expect(cells2.at(2).find(FileSize)).toHaveLength(1);
     expect(cells2.at(2).find(FileSize)).toHaveProp({ size: 12 });

@@ -1,7 +1,16 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import NodeLink from './NodeLink';
 
 export default class PathNavigation extends Component {
+  static propTypes = {
+    node: PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      parent: PropTypes.object,
+    }).isRequired,
+  }
+
   render() {
     const { node } = this.props;
     const parentLinks = [];

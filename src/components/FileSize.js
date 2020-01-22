@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 const SIZE_SUFFIXES = ['B', 'KB', 'MB', 'GB', 'TB'];
 
@@ -13,6 +14,10 @@ const displaySize = function(size) {
 }
 
 export default class FileSize extends Component {
+  static propTypes = {
+    size: PropTypes.number.isRequired,
+  }
+
   render() {
     let { size, suffix } = displaySize(this.props.size);
     return(

@@ -1,8 +1,20 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import IndexView from './IndexView';
 
 export default class DirectoriesRouter extends Component {
+  static propTypes = {
+    directories: PropTypes.arrayOf(PropTypes.shape({
+      key: PropTypes.string.isRequired,
+      path: PropTypes.string.isRequired,
+    }).isRequired).isRequired,
+    sortStore: PropTypes.object,
+    sortClassDeterminator: PropTypes.func,
+    searchFilter: PropTypes.func,
+    sortItems: PropTypes.func,
+  }
+
   render() {
     const {
       directories,
