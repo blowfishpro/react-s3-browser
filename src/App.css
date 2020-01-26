@@ -103,8 +103,7 @@
 .sort-desc {
   position: relative;
   float: right;
-  width: 1.25em;
-  height: 1.25em;
+  margin-right: 0.5em;
 }
 
 .sort-none:before,

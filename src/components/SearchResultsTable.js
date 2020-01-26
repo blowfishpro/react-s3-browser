@@ -41,13 +41,13 @@ export default class SearchResultsTable extends Component {
         <table>
           <thead>
             <tr>
-              <td className='objects-table__column_name'>
+              <td className='column_name'>
                 <span>Name</span>
               </td>
-              <td className='objects-table__column_last-modified'>
+              <td className='column_last-modified'>
                 <span>Last Modified</span>
               </td>
-              <td className='objects-table__column_size'>
+              <td className='column_size'>
                 <span>Size</span>
               </td>
             </tr>
