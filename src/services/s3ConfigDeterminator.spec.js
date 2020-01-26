@@ -60,6 +60,26 @@ describe(s3ConfigDeterminator, () => {
       expect(urlBase).toEqual('https://my-bucket.s3.us-east-1.amazonaws.com');
     });
 
+    it('parses the bucket out of the domain name in an s3 website url', () => {
+      const { bucketName, forcePathStyle, urlBase } = s3ConfigDeterminator({
+        s3Config: null,
+        href: 'https://my-bucket.s3-website.us-east-1.amazonaws.com/some/path',
+      });
+      expect(bucketName).toEqual('my-bucket');
+      expect(forcePathStyle).toBeFalsy();
+      expect(urlBase).toEqual('https://my-bucket.s3-website.us-east-1.amazonaws.com');
+    });
+
+    it('parses the bucket out of the domain name in an s3 website url using a hyphen before the region', () => {
+      const { bucketName, forcePathStyle, urlBase } = s3ConfigDeterminator({
+        s3Config: null,
+        href: 'https://my-bucket.s3-website-us-east-1.amazonaws.com/some/path',
+      });
+      expect(bucketName).toEqual('my-bucket');
+      expect(forcePathStyle).toBeFalsy();
+      expect(urlBase).toEqual('https://my-bucket.s3-website-us-east-1.amazonaws.com');
+    });
+
     it('parses the bucket out of the path', () => {
       const { bucketName, forcePathStyle, urlBase } = s3ConfigDeterminator({
         s3Config: null,
