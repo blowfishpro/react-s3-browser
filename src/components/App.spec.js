@@ -24,7 +24,7 @@ describe(App, () => {
     const router = wrapper.find(DirectoriesRouter);
     expect(router).toHaveLength(1);
     expect(router).toHaveProp({
-      directories: directories,
+      directories,
       sortStore,
       sortClassDeterminator,
       searchFilter,
