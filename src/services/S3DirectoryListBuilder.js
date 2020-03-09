@@ -46,6 +46,6 @@ export default function S3DirectoryListBuilder(rootName, baseUrl) {
       });
     });
 
-    return directories;
+    return { root, directories };
   };
 }

@@ -6,8 +6,9 @@ import DirectoriesRouter from './DirectoriesRouter';
 describe(App, () => {
   it('Renders the router if the store has directories', () => {
     const sortStore = { name: 'sortStore' };
+    const root = { key: '/', path: '/' };
     const directories = [{ key: 'dir1', path: '/dir1'}, { key: 'dir1', path: '/dir2' }];
-    const directoriesStore = { hasDirectories: true, error: false, directories };
+    const directoriesStore = { hasDirectories: true, error: false, root, directories };
     const sortClassDeterminator = jest.fn();
     const searchFilter = jest.fn();
     const sortItems = jest.fn();
@@ -24,6 +25,7 @@ describe(App, () => {
     const router = wrapper.find(DirectoriesRouter);
     expect(router).toHaveLength(1);
     expect(router).toHaveProp({
+      root,
       directories,
       sortStore,
       sortClassDeterminator,
@@ -36,7 +38,7 @@ describe(App, () => {
     const wrapper = shallow(
       <App
         sortStore={{}}
-        directoriesStore={{ hasDirectories: false, error: true, directories: null }}
+        directoriesStore={{ hasDirectories: false, error: true, root: null, directories: null }}
         sortClassDeterminator={jest.fn()}
       />
     );

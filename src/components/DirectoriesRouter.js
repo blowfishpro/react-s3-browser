@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import IndexView from './IndexView';
+import NotFound from './NotFound';
 
 export default class DirectoriesRouter extends Component {
   static propTypes = {
+    root: PropTypes.object,
     directories: PropTypes.arrayOf(PropTypes.shape({
       key: PropTypes.string.isRequired,
       path: PropTypes.string.isRequired,
@@ -17,6 +19,7 @@ export default class DirectoriesRouter extends Component {
 
   render() {
     const {
+      root,
       directories,
       sortStore,
       sortClassDeterminator,
@@ -40,6 +43,7 @@ export default class DirectoriesRouter extends Component {
       <Router>
         <Switch>
           {dirRoutes}
+          <Route path='*' render={({ location: { pathname } }) => <NotFound root={root} path={pathname} />} />
         </Switch>
       </Router>
     );
