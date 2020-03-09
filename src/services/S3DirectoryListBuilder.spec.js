@@ -101,12 +101,15 @@ describe(S3DirectoryListBuilder, () => {
     };
     bar3Node.children.push(baz3Node);
 
-    const expected = [
+    const expected = {
       root,
-      foo2Node,
-      bar2Node,
-      bar3Node,
-    ];
+      directories: [
+        root,
+        foo2Node,
+        bar2Node,
+        bar3Node,
+      ],
+    };
 
     expect(S3DirectoryListBuilder('bucket-name', 'https://bucket-name.s3.amazonaws.com')(data)).toEqual(expected);
   });

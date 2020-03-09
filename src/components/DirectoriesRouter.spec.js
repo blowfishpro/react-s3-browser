@@ -3,9 +3,11 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { shallow } from 'enzyme';
 import DirectoriesRouter from './DirectoriesRouter';
 import IndexView from './IndexView';
+import NotFound from './NotFound';
 
 describe(DirectoriesRouter, () => {
   it('renders', () => {
+    const root = { key: '/', path: '/' };
     const directories = [
       { key: 'a', path: '/a', name: 'a', children: [] },
       { key: 'b', path: '/b', name: 'b', children: [] },
@@ -17,6 +19,7 @@ describe(DirectoriesRouter, () => {
     const sortItems = jest.fn();
     const wrapper = shallow(
       <DirectoriesRouter
+        root={root}
         directories={directories}
         sortStore={sortStore}
         sortClassDeterminator={sortClassDeterminator}
@@ -30,7 +33,7 @@ describe(DirectoriesRouter, () => {
     const routeSwitch = router.find(Switch);
     expect(routeSwitch).toHaveLength(1);
     const routes = routeSwitch.find(Route);
-    expect(routes).toHaveLength(3);
+    expect(routes).toHaveLength(4);
 
     expect(routes.at(0)).toHaveProp({ exact: true, path: '/a' });
     const renderedNode0 = shallow(
@@ -79,5 +82,15 @@ describe(DirectoriesRouter, () => {
       searchFilter,
       sortItems,
     });
+
+    expect(routes.at(3)).toHaveProp({ path: '*' });
+    const renderedNode3 = shallow(
+      <div>
+        {routes.at(3).props().render({ location: { pathname: '/not/found' }})}
+      </div>
+    );
+    const notFound = renderedNode3.find(NotFound);
+    expect(notFound).toHaveLength(1);
+    expect(notFound).toHaveProp({ root: root, path: '/not/found' });
   });
 });

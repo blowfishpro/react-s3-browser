@@ -43,8 +43,8 @@ const directoriesStore = new DirectoriesStore();
 
 bucketFetcher
   .then(data => treeBuilder(data))
-  .then(directories => {
-    directoriesStore.setDirectories(directories);
+  .then(({ root, directories }) => {
+    directoriesStore.setDirectories({ root, directories });
   })
   .catch((err) => {
     console.log(err);

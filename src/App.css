@@ -38,6 +38,30 @@
   }
 }
 
+.not-found {
+  margin: 0.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.not-found::before {
+  content: '⚠';
+  font-size: 2em;
+  color: #f00;
+  font-weight: bold;
+}
+
+.not-found .content {
+  display: inline-block;
+  margin: 0.5em;
+}
+
+.not-found .content .message {
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
 .objects-table {
   margin: 0.5em;
 }

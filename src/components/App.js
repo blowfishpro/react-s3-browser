@@ -10,6 +10,7 @@ export default @observer class App extends Component {
     directoriesStore: PropTypes.shape({
       hasDirectories: PropTypes.bool.isRequired,
       error: PropTypes.bool.isRequired,
+      root: PropTypes.object,
       directories: PropTypes.array,
     }).isRequired,
     sortClassDeterminator: PropTypes.func,
@@ -30,6 +31,7 @@ export default @observer class App extends Component {
       return (
         <DirectoriesRouter
           sortStore={sortStore}
+          root={directoriesStore.root}
           directories={directoriesStore.directories}
           sortClassDeterminator={sortClassDeterminator}
           searchFilter={searchFilter}
