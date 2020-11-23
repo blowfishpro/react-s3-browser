@@ -3,8 +3,7 @@ const s3GenericDomainRegex = /^(?<urlBase>s3(?:\.(?<region>[A-Za-z0-9-]+))?\.ama
 const s3WebsiteDomainRegex = /^(?<urlBase>(?<bucketName>[A-Za-z0-9-]+)\.s3-website[.-](?<region>[A-Za-z0-9-]+)\.amazonaws\.com)$/;
 
 export function fromS3Config(s3Config) {
-  const { bucketName, region } = s3Config;
-  const forcePathStyle = s3Config.forcePathStyle || false;
+  const { bucketName, region, forcePathStyle = false } = s3Config;
   let objectUrlBase = region ? `s3.${region}.amazonaws.com` : 's3.amazonaws.com';
   objectUrlBase = forcePathStyle ? `${objectUrlBase}/${bucketName}` : `${bucketName}.${objectUrlBase}`;
   objectUrlBase = `https://${objectUrlBase}`;
