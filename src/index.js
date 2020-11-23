@@ -4,7 +4,7 @@ import AWS from 'aws-sdk';
 import './index.css';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
-import s3ConfigDeterminator from './services/s3ConfigDeterminator';
+import * as s3ConfigDeterminator from './services/s3ConfigDeterminator';
 import s3BucketFetcher from './services/s3BucketFetcher';
 import S3DirectoryListBuilder from './services/S3DirectoryListBuilder';
 import DirectoriesStore from './stores/DirectoriesStore';
@@ -13,7 +13,13 @@ import SortClassDeterminator from './services/SortClassDeterminator';
 import searchFilter from './services/searchFilter';
 import sortItems from './services/sortItems';
 
-let { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator({ s3Config: window.s3Config, hostname: window.location.hostname, pathname: window.location.pathname });
+let bucketName, forcePathStyle, objectUrlBase;
+
+if (window.s3Config) {
+  ({ bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator.fromS3Config(window.s3Config));
+} else {
+  ({ bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator.fromHostPath({ hostname: window.location.hostname, pathname: window.location.pathname }));
+}
 
 let bucketFetcher;
 

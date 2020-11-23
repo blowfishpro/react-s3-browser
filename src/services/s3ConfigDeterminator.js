@@ -2,15 +2,16 @@ const s3BucketDomainRegex = /^(?<urlBase>(?<bucketName>[A-Za-z0-9-]+)\.s3(?:\.(?
 const s3GenericDomainRegex = /^(?<urlBase>s3(?:\.(?<region>[A-Za-z0-9-]+))?\.amazonaws\.com)$/;
 const s3WebsiteDomainRegex = /^(?<urlBase>(?<bucketName>[A-Za-z0-9-]+)\.s3-website[.-](?<region>[A-Za-z0-9-]+)\.amazonaws\.com)$/;
 
-export default function s3ConfigDeterminator({ s3Config, hostname, pathname }) {
-  if (s3Config && s3Config.bucketName) {
-    const { bucketName, region } = s3Config;
-    const forcePathStyle = s3Config.forcePathStyle || false;
-    let objectUrlBase = region ? `s3.${region}.amazonaws.com` : 's3.amazonaws.com';
-    objectUrlBase = forcePathStyle ? `${objectUrlBase}/${bucketName}` : `${bucketName}.${objectUrlBase}`;
-    objectUrlBase = `https://${objectUrlBase}`;
-    return { bucketName, forcePathStyle, objectUrlBase };
-  }
+export function fromS3Config(s3Config) {
+  const { bucketName, region } = s3Config;
+  const forcePathStyle = s3Config.forcePathStyle || false;
+  let objectUrlBase = region ? `s3.${region}.amazonaws.com` : 's3.amazonaws.com';
+  objectUrlBase = forcePathStyle ? `${objectUrlBase}/${bucketName}` : `${bucketName}.${objectUrlBase}`;
+  objectUrlBase = `https://${objectUrlBase}`;
+  return { bucketName, forcePathStyle, objectUrlBase };
+}
+
+export function fromHostPath({ hostname, pathname }) {
   const s3BucketDomainMatch = hostname.match(s3BucketDomainRegex);
   if (s3BucketDomainMatch) {
     return { bucketName: s3BucketDomainMatch.groups.bucketName, forcePathStyle: false, objectUrlBase: `https://${s3BucketDomainMatch.groups.urlBase}` };

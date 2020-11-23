@@ -1,11 +1,10 @@
-import s3ConfigDeterminator from './s3ConfigDeterminator';
+import * as s3ConfigDeterminator from './s3ConfigDeterminator';
 
-describe(s3ConfigDeterminator, () => {
-  describe('using s3Config', () => {
+describe('s3ConfigDeterminator', () => {
+  describe(s3ConfigDeterminator.fromS3Config, () => {
     it('uses the bucket name from the s3 config and sets forcePatyStyle to false if not specified', () => {
-      const { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator({
-        s3Config: { bucketName: 'my-bucket' },
-        href: null,
+      const { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator.fromS3Config({
+        bucketName: 'my-bucket',
       });
       expect(bucketName).toEqual('my-bucket');
       expect(forcePathStyle).toBeFalsy();
@@ -13,9 +12,9 @@ describe(s3ConfigDeterminator, () => {
     });
 
     it('uses the bucket name from the s3 config and uses forcePatyStyle if not specified', () => {
-      const { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator({
-        s3Config: { bucketName: 'my-bucket', forcePathStyle: true },
-        href: null,
+      const { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator.fromS3Config({
+        bucketName: 'my-bucket',
+        forcePathStyle: true,
       });
       expect(bucketName).toEqual('my-bucket');
       expect(forcePathStyle).toBeTruthy();
@@ -23,26 +22,27 @@ describe(s3ConfigDeterminator, () => {
     });
 
     it('includes a region in the url if specified', () => {
-      const { objectUrlBase } = s3ConfigDeterminator({
-        s3Config: { bucketName: 'my-bucket', forcePathStyle: false, region: 'us-east-1' },
-        href: null,
+      const { objectUrlBase } = s3ConfigDeterminator.fromS3Config({
+        bucketName: 'my-bucket',
+        forcePathStyle: false,
+        region: 'us-east-1',
       });
       expect(objectUrlBase).toEqual('https://my-bucket.s3.us-east-1.amazonaws.com');
     });
 
     it('includes a region in the url if specified with path style', () => {
-      const { objectUrlBase } = s3ConfigDeterminator({
-        s3Config: { bucketName: 'my-bucket', forcePathStyle: true, region: 'us-east-1' },
-        href: null,
+      const { objectUrlBase } = s3ConfigDeterminator.fromS3Config({
+        bucketName: 'my-bucket',
+        forcePathStyle: true,
+        region: 'us-east-1',
       });
       expect(objectUrlBase).toEqual('https://s3.us-east-1.amazonaws.com/my-bucket');
     });
   });
 
-  describe('using hostname/pathname', () => {
+  describe(s3ConfigDeterminator.fromHostPath, () => {
     it('parses the bucket out of the domain name', () => {
-      const { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator({
-        s3Config: null,
+      const { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator.fromHostPath({
         hostname: 'my-bucket.s3.amazonaws.com',
         pathname: '/some/path',
       });
@@ -52,8 +52,7 @@ describe(s3ConfigDeterminator, () => {
     });
 
     it('parses the bucket out of the domain name with a region specified', () => {
-      const { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator({
-        s3Config: null,
+      const { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator.fromHostPath({
         hostname: 'my-bucket.s3.us-east-1.amazonaws.com',
         pathname: '/some/path',
       });
@@ -63,8 +62,7 @@ describe(s3ConfigDeterminator, () => {
     });
 
     it('parses the bucket out of the domain name in an s3 website url', () => {
-      const { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator({
-        s3Config: null,
+      const { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator.fromHostPath({
         hostname: 'my-bucket.s3-website.us-east-1.amazonaws.com',
         pathname: '/some/path',
       });
@@ -74,8 +72,7 @@ describe(s3ConfigDeterminator, () => {
     });
 
     it('parses the bucket out of the domain name in an s3 website url using a hyphen before the region', () => {
-      const { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator({
-        s3Config: null,
+      const { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator.fromHostPath({
         hostname: 'my-bucket.s3-website-us-east-1.amazonaws.com',
         pathname: '/some/path',
       });
@@ -85,8 +82,7 @@ describe(s3ConfigDeterminator, () => {
     });
 
     it('parses the bucket out of the path', () => {
-      const { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator({
-        s3Config: null,
+      const { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator.fromHostPath({
         hostname: 's3.amazonaws.com',
         pathname: '/my-bucket/some/path',
       });
@@ -96,8 +92,7 @@ describe(s3ConfigDeterminator, () => {
     });
 
     it('parses the bucket out of the path with a region specified', () => {
-      const { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator({
-        s3Config: null,
+      const { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator.fromHostPath({
         hostname: 's3.us-east-1.amazonaws.com',
         pathname: '/my-bucket/some/path',
       });
@@ -107,8 +102,7 @@ describe(s3ConfigDeterminator, () => {
     });
 
     it('does not parse the bucket out of an empty path with a generic s3 domain', () => {
-      const { bucketName, objectUrlBase } = s3ConfigDeterminator({
-        s3Config: null,
+      const { bucketName, objectUrlBase } = s3ConfigDeterminator.fromHostPath({
         hostname: 's3.amazonaws.com',
         pathname: '/',
       });
