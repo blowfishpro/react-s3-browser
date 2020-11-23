@@ -13,7 +13,7 @@ import SortClassDeterminator from './services/SortClassDeterminator';
 import searchFilter from './services/searchFilter';
 import sortItems from './services/sortItems';
 
-let { bucketName, forcePathStyle, urlBase } = s3ConfigDeterminator({ s3Config: window.s3Config, href: window.location.href });
+let { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator({ s3Config: window.s3Config, hostname: window.location.hostname, pathname: window.location.pathname });
 
 let bucketFetcher;
 
@@ -23,7 +23,7 @@ if (bucketName) {
 } else if (process.env.NODE_ENV !== 'production') {
   console.log('using fake s3 data');
   bucketName = 'example-bucket';
-  urlBase = `https://${bucketName}.s3.amazonaws.com`;
+  objectUrlBase = `https://${bucketName}.s3.amazonaws.com`;
   const data = [
     { Key: 'foo1.file', Size: 1, LastModified: new Date('2000-01-01 00:00:00 +0000') },
     { Key: 'foo2/bar1.file', Size: 2, LastModified: new Date('2000-01-01 00:00:01 +0000') },
@@ -36,7 +36,7 @@ if (bucketName) {
   throw new Error('Unable to determine s3 bucket');
 }
 
-const treeBuilder = S3DirectoryListBuilder(bucketName, urlBase);
+const treeBuilder = S3DirectoryListBuilder(bucketName, objectUrlBase);
 
 const sortStore = new SortStore('name', 'asc');
 const directoriesStore = new DirectoriesStore();

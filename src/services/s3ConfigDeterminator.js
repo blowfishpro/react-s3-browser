@@ -1,27 +1,28 @@
-const s3DomainRegex = /^(?<urlBase>https?:\/\/(?<bucketName>[A-Za-z0-9-]+)\.s3(?:\.(?<region>[A-Za-z0-9-]+))?\.amazonaws\.com)/;
-const s3PathRegex = /^(?<urlBase>https?:\/\/s3(?:\.(?<region>[A-Za-z0-9-]+))?\.amazonaws\.com\/(?<bucketName>[A-Za-z0-9-]+))/;
-const s3WebsiteRegex = /^(?<urlBase>https?:\/\/(?<bucketName>[A-Za-z0-9-]+)\.s3-website[.-](?<region>[A-Za-z0-9-]+)\.amazonaws\.com)/;
+const s3BucketDomainRegex = /^(?<urlBase>(?<bucketName>[A-Za-z0-9-]+)\.s3(?:\.(?<region>[A-Za-z0-9-]+))?\.amazonaws\.com)$/;
+const s3GenericDomainRegex = /^(?<urlBase>s3(?:\.(?<region>[A-Za-z0-9-]+))?\.amazonaws\.com)$/;
+const s3WebsiteDomainRegex = /^(?<urlBase>(?<bucketName>[A-Za-z0-9-]+)\.s3-website[.-](?<region>[A-Za-z0-9-]+)\.amazonaws\.com)$/;
 
-export default function s3ConfigDeterminator({ s3Config, href }) {
+export default function s3ConfigDeterminator({ s3Config, hostname, pathname }) {
   if (s3Config && s3Config.bucketName) {
     const { bucketName, region } = s3Config;
     const forcePathStyle = s3Config.forcePathStyle || false;
-    let urlBase = region ? `s3.${region}.amazonaws.com` : 's3.amazonaws.com';
-    urlBase = forcePathStyle ? `${urlBase}/${bucketName}` : `${bucketName}.${urlBase}`;
-    urlBase = `https://${urlBase}`;
-    return { bucketName, forcePathStyle, urlBase };
+    let objectUrlBase = region ? `s3.${region}.amazonaws.com` : 's3.amazonaws.com';
+    objectUrlBase = forcePathStyle ? `${objectUrlBase}/${bucketName}` : `${bucketName}.${objectUrlBase}`;
+    objectUrlBase = `https://${objectUrlBase}`;
+    return { bucketName, forcePathStyle, objectUrlBase };
   }
-  const domainMatch = href.match(s3DomainRegex);
-  if (domainMatch) {
-    return { bucketName: domainMatch.groups.bucketName, forcePathStyle: false, urlBase: domainMatch.groups.urlBase };
+  const s3BucketDomainMatch = hostname.match(s3BucketDomainRegex);
+  if (s3BucketDomainMatch) {
+    return { bucketName: s3BucketDomainMatch.groups.bucketName, forcePathStyle: false, objectUrlBase: `https://${s3BucketDomainMatch.groups.urlBase}` };
   }
-  const pathMatch = href.match(s3PathRegex);
-  if (pathMatch) {
-    return { bucketName: pathMatch.groups.bucketName, forcePathStyle: true, urlBase: pathMatch.groups.urlBase };
+  const s3GenericDomainMatch = hostname.match(s3GenericDomainRegex);
+  const splitPath = pathname.split('/');
+  if (s3GenericDomainMatch && splitPath.length > 1 && splitPath[1] !== '') {
+    return { bucketName: splitPath[1], forcePathStyle: true, objectUrlBase: `https://${s3GenericDomainMatch.groups.urlBase}/${splitPath[1]}` };
   }
-  const websiteMatch = href.match(s3WebsiteRegex);
-  if (websiteMatch) {
-    return { bucketName: websiteMatch.groups.bucketName, forcePathStyle: false, urlBase: websiteMatch.groups.urlBase };
+  const s3WebsiteDomainMatch = hostname.match(s3WebsiteDomainRegex);
+  if (s3WebsiteDomainMatch) {
+    return { bucketName: s3WebsiteDomainMatch.groups.bucketName, forcePathStyle: false, objectUrlBase: `http://${s3WebsiteDomainMatch.groups.urlBase}` };
   }
-  return { bucketName: null, forcePathStyle: false, urlBase: null };
+  return { bucketName: null, forcePathStyle: false, objectUrlBase: null };
 }
