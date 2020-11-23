@@ -15,6 +15,7 @@ export default class DirectoriesRouter extends Component {
     sortClassDeterminator: PropTypes.func,
     searchFilter: PropTypes.func,
     sortItems: PropTypes.func,
+    basePath: PropTypes.string,
   }
 
   render() {
@@ -25,6 +26,7 @@ export default class DirectoriesRouter extends Component {
       sortClassDeterminator,
       searchFilter,
       sortItems,
+      basePath,
     } = this.props;
 
     const dirRoutes = directories.map(dir => {
@@ -40,7 +42,7 @@ export default class DirectoriesRouter extends Component {
     })
 
     return (
-      <Router>
+      <Router basename={basePath}>
         <Switch>
           {dirRoutes}
           <Route path='*' render={({ location: { pathname } }) => <NotFound root={root} path={pathname} />} />

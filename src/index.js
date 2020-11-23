@@ -13,12 +13,12 @@ import SortClassDeterminator from './services/SortClassDeterminator';
 import searchFilter from './services/searchFilter';
 import sortItems from './services/sortItems';
 
-let bucketName, forcePathStyle, objectUrlBase;
+let bucketName, forcePathStyle, objectUrlBase, basePath;
 
 if (window.s3Config) {
-  ({ bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator.fromS3Config(window.s3Config));
+  ({ bucketName, forcePathStyle, objectUrlBase, basePath } = s3ConfigDeterminator.fromS3Config(window.s3Config));
 } else {
-  ({ bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator.fromHostPath({ hostname: window.location.hostname, pathname: window.location.pathname }));
+  ({ bucketName, forcePathStyle, objectUrlBase, basePath } = s3ConfigDeterminator.fromHostPath({ hostname: window.location.hostname, pathname: window.location.pathname }));
 }
 
 let bucketFetcher;
@@ -30,6 +30,7 @@ if (bucketName) {
   console.log('using fake s3 data');
   bucketName = 'example-bucket';
   objectUrlBase = `https://${bucketName}.s3.amazonaws.com`;
+  basePath = '/';
   const data = [
     { Key: 'foo1.file', Size: 1, LastModified: new Date('2000-01-01 00:00:00 +0000') },
     { Key: 'foo2/bar1.file', Size: 2, LastModified: new Date('2000-01-01 00:00:01 +0000') },
@@ -71,6 +72,7 @@ ReactDOM.render(
     sortClassDeterminator={sortClassDeterminator}
     searchFilter={searchFilter}
     sortItems={sortItems}
+    basePath={basePath}
   />,
   document.getElementById('root')
 );

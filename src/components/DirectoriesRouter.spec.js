@@ -16,7 +16,8 @@ describe(DirectoriesRouter, () => {
     const sortStore = { name: 'sortStore' };
     const sortClassDeterminator = jest.fn();
     const searchFilter = jest.fn();
-    const sortItems = jest.fn();
+    const sortItems = jest.fn
+    const basePath = '/some/path';
     const wrapper = shallow(
       <DirectoriesRouter
         root={root}
@@ -25,11 +26,13 @@ describe(DirectoriesRouter, () => {
         sortClassDeterminator={sortClassDeterminator}
         searchFilter={searchFilter}
         sortItems={sortItems}
+        basePath={basePath}
       />
     );
 
     const router = wrapper.find(Router);
     expect(router).toHaveLength(1);
+    expect(router).toHaveProp({ basename: basePath });
     const routeSwitch = router.find(Switch);
     expect(routeSwitch).toHaveLength(1);
     const routes = routeSwitch.find(Route);

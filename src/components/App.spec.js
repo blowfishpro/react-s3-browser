@@ -12,6 +12,7 @@ describe(App, () => {
     const sortClassDeterminator = jest.fn();
     const searchFilter = jest.fn();
     const sortItems = jest.fn();
+    const basePath = '/some/path';
     const wrapper = shallow(
       <App
         sortStore={sortStore}
@@ -19,6 +20,7 @@ describe(App, () => {
         sortClassDeterminator={sortClassDeterminator}
         searchFilter={searchFilter}
         sortItems={sortItems}
+        basePath={basePath}
       />
     );
 
@@ -31,6 +33,7 @@ describe(App, () => {
       sortClassDeterminator,
       searchFilter,
       sortItems,
+      basePath,
     });
   });
 
