@@ -35,13 +35,15 @@ if (window.s3Config) {
 } else {
   let forcePathStyle;
   ({ bucketName, forcePathStyle, objectUrlBase, basePath } = s3ConfigDeterminator.fromHostPath({ hostname: window.location.hostname, pathname: window.location.pathname }));
+
+  if (!bucketName) {
+    throw new Error('Unable to determine s3 bucket');
+  }
+
     const s3 = new AWS.S3({ params: { Bucket: bucketName }, s3ForcePathStyle: forcePathStyle });
     bucketFetcher = s3.makeUnauthenticatedRequest('listObjectsV2').promise();
 }
 
-if (!bucketName) {
-  throw new Error('Unable to determine s3 bucket');
-}
 
 const treeBuilder = S3DirectoryListBuilder(bucketName, objectUrlBase);
 
