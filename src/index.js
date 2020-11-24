@@ -12,9 +12,10 @@ import SortClassDeterminator from './services/SortClassDeterminator';
 import searchFilter from './services/searchFilter';
 import sortItems from './services/sortItems';
 
-let bucketName, forcePathStyle, objectUrlBase, basePath, bucketFetcher;
+let bucketName, objectUrlBase, basePath, bucketFetcher;
 
 if (window.s3Config) {
+  let forcePathStyle;
   ({ bucketName, forcePathStyle, objectUrlBase, basePath } = s3ConfigDeterminator.fromS3Config(window.s3Config));
     const s3 = new AWS.S3({ params: { Bucket: bucketName }, s3ForcePathStyle: forcePathStyle });
     bucketFetcher = s3.makeUnauthenticatedRequest('listObjectsV2').promise();
@@ -32,6 +33,7 @@ if (window.s3Config) {
   ];
   bucketFetcher = new Promise((resolve, reject) => setTimeout(() => resolve({ Contents: data}), 500));
 } else {
+  let forcePathStyle;
   ({ bucketName, forcePathStyle, objectUrlBase, basePath } = s3ConfigDeterminator.fromHostPath({ hostname: window.location.hostname, pathname: window.location.pathname }));
     const s3 = new AWS.S3({ params: { Bucket: bucketName }, s3ForcePathStyle: forcePathStyle });
     bucketFetcher = s3.makeUnauthenticatedRequest('listObjectsV2').promise();
