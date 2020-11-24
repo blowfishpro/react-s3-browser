@@ -20,6 +20,7 @@ export function fromHostPath({ hostname, pathname }) {
       basePath: '/',
     });
   }
+
   const s3GenericDomainMatch = hostname.match(s3GenericDomainRegex);
   const splitPath = pathname.split('/');
   if (s3GenericDomainMatch && splitPath.length > 1 && splitPath[1] !== '') {
@@ -30,6 +31,7 @@ export function fromHostPath({ hostname, pathname }) {
       basePath: `/${splitPath[1]}`,
     });
   }
+
   const s3WebsiteDomainMatch = hostname.match(s3WebsiteDomainRegex);
   if (s3WebsiteDomainMatch) {
     return ({
@@ -39,8 +41,10 @@ export function fromHostPath({ hostname, pathname }) {
       basePath: '/',
     });
   }
+
   if (splitPath.length > 1 && splitPath[1] !== '') {
     return { bucketName: splitPath[1], forcePathStyle: false, objectUrlBase: `https://${splitPath[1]}.s3.amazonaws.com` };
   }
+
   return { bucketName: null, forcePathStyle: false, objectUrlBase: null };
 }

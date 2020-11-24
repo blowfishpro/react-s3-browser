@@ -53,7 +53,6 @@ if (window.s3Config) {
   bucketFetcher = s3.makeUnauthenticatedRequest('listObjectsV2').promise();
 }
 
-
 const treeBuilder = S3DirectoryListBuilder(bucketName, objectUrlBase);
 
 const sortStore = new SortStore('name', 'asc');
