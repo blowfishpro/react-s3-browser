@@ -12,19 +12,12 @@ import SortClassDeterminator from './services/SortClassDeterminator';
 import searchFilter from './services/searchFilter';
 import sortItems from './services/sortItems';
 
-let bucketName, forcePathStyle, objectUrlBase, basePath;
+let bucketName, forcePathStyle, objectUrlBase, basePath, bucketFetcher;
 
 if (window.s3Config) {
   ({ bucketName, forcePathStyle, objectUrlBase, basePath } = s3ConfigDeterminator.fromS3Config(window.s3Config));
-} else {
-  ({ bucketName, forcePathStyle, objectUrlBase, basePath } = s3ConfigDeterminator.fromHostPath({ hostname: window.location.hostname, pathname: window.location.pathname }));
-}
-
-let bucketFetcher;
-
-if (bucketName) {
-  const s3 = new AWS.S3({ params: { Bucket: bucketName }, s3ForcePathStyle: forcePathStyle });
-  bucketFetcher = s3.makeUnauthenticatedRequest('listObjectsV2').promise();
+    const s3 = new AWS.S3({ params: { Bucket: bucketName }, s3ForcePathStyle: forcePathStyle });
+    bucketFetcher = s3.makeUnauthenticatedRequest('listObjectsV2').promise();
 } else if (process.env.NODE_ENV !== 'production') {
   console.log('using fake s3 data');
   bucketName = 'example-bucket';
@@ -39,6 +32,12 @@ if (bucketName) {
   ];
   bucketFetcher = new Promise((resolve, reject) => setTimeout(() => resolve({ Contents: data}), 500));
 } else {
+  ({ bucketName, forcePathStyle, objectUrlBase, basePath } = s3ConfigDeterminator.fromHostPath({ hostname: window.location.hostname, pathname: window.location.pathname }));
+    const s3 = new AWS.S3({ params: { Bucket: bucketName }, s3ForcePathStyle: forcePathStyle });
+    bucketFetcher = s3.makeUnauthenticatedRequest('listObjectsV2').promise();
+}
+
+if (!bucketName) {
   throw new Error('Unable to determine s3 bucket');
 }
 
