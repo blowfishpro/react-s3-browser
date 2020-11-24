@@ -125,12 +125,10 @@ describe('s3ConfigDeterminator', () => {
     });
 
     it('does not parse the bucket out of an empty path with a generic s3 domain', () => {
-      const { bucketName, objectUrlBase } = s3ConfigDeterminator.fromHostPath({
+      expect(() => s3ConfigDeterminator.fromHostPath({
         hostname: 's3.amazonaws.com',
         pathname: '/',
-      });
-      expect(bucketName).toBeNull();
-      expect(objectUrlBase).toBeNull();
+      })).toThrow(s3ConfigDeterminator.CannotDetermineBucket);
     });
 
     it('assumes the first path part is the bucket for a generic url', () => {
@@ -144,12 +142,10 @@ describe('s3ConfigDeterminator', () => {
     });
 
     it('does not parse the bucket out of an empty path', () => {
-      const { bucketName, objectUrlBase } = s3ConfigDeterminator.fromHostPath({
+      expect(() => s3ConfigDeterminator.fromHostPath({
         hostname: 'example.com',
         pathname: '/',
-      });
-      expect(bucketName).toBeNull();
-      expect(objectUrlBase).toBeNull();
+      })).toThrow(s3ConfigDeterminator.CannotDetermineBucket);
     });
   });
 });

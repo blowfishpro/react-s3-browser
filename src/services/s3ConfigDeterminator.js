@@ -10,6 +10,13 @@ export function fromS3Config(s3Config) {
   return { bucketName, forcePathStyle, objectUrlBase, basePath };
 }
 
+export class CannotDetermineBucket extends Error {
+  constructor() {
+    super('Cannot determine S3 bucket');
+    this.name = 'CannotDetermineBucket';
+  }
+}
+
 export function fromHostPath({ hostname, pathname }) {
   const s3BucketDomainMatch = hostname.match(s3BucketDomainRegex);
   if (s3BucketDomainMatch) {
@@ -46,5 +53,5 @@ export function fromHostPath({ hostname, pathname }) {
     return { bucketName: splitPath[1], forcePathStyle: false, objectUrlBase: `https://${splitPath[1]}.s3.amazonaws.com` };
   }
 
-  return { bucketName: null, forcePathStyle: false, objectUrlBase: null };
+  throw new CannotDetermineBucket();
 }

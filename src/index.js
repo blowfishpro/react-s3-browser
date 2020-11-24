@@ -58,10 +58,6 @@ async function loadData() {
       let forcePathStyle;
       ({ bucketName, forcePathStyle, objectUrlBase, basePath } = s3ConfigDeterminator.fromHostPath({ hostname: window.location.hostname, pathname: window.location.pathname }));
 
-      if (!bucketName) {
-        throw new Error('Unable to determine s3 bucket');
-      }
-
       const s3 = new AWS.S3({ params: { Bucket: bucketName }, s3ForcePathStyle: forcePathStyle });
       const data = await s3.makeUnauthenticatedRequest('listObjectsV2').promise();
       contents = data.Contents;
@@ -73,7 +69,12 @@ async function loadData() {
 
     appStore.onLoaded({ root, directories, basePath });
   } catch (error) {
-    appStore.onError('Error loading bucket');
+    console.error(error);
+    if (error instanceof s3ConfigDeterminator.CannotDetermineBucket) {
+      appStore.onError(error.message);
+    } else {
+      appStore.onError('Error loading data');
+    }
   }
 }
 
