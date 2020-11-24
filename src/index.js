@@ -49,8 +49,8 @@ if (window.s3Config) {
     throw new Error('Unable to determine s3 bucket');
   }
 
-    const s3 = new AWS.S3({ params: { Bucket: bucketName }, s3ForcePathStyle: forcePathStyle });
-    bucketFetcher = s3.makeUnauthenticatedRequest('listObjectsV2').promise();
+  const s3 = new AWS.S3({ params: { Bucket: bucketName }, s3ForcePathStyle: forcePathStyle });
+  bucketFetcher = s3.makeUnauthenticatedRequest('listObjectsV2').promise();
 }
 
 
