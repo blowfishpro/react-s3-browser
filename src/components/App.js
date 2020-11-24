@@ -32,7 +32,7 @@ export default @observer class App extends Component {
     if (appStore.isLoading) {
       return <div className="loading" />;
     } else if (appStore.isError) {
-      return <div className="error">Error loading bucket</div>;
+      return <div className="error">{appStore.error}</div>;
     } else if (appStore.isLoaded) {
       return (
         <DirectoriesRouter

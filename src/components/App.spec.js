@@ -46,7 +46,7 @@ describe(App, () => {
     );
 
     expect(wrapper).toMatchElement(
-      <div className="error">Error loading bucket</div>,
+      <div className="error">this is the error</div>,
       { ignoreProps: false },
     );
   });
