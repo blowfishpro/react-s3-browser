@@ -6,7 +6,7 @@ import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 import * as s3ConfigDeterminator from './services/s3ConfigDeterminator';
 import S3DirectoryListBuilder from './services/S3DirectoryListBuilder';
-import DirectoriesStore from './stores/DirectoriesStore';
+import AppStore from './stores/AppStore';
 import SortStore from './stores/SortStore';
 import SortClassDeterminator from './services/SortClassDeterminator';
 import searchFilter from './services/searchFilter';
@@ -56,16 +56,16 @@ if (window.s3Config) {
 const treeBuilder = S3DirectoryListBuilder(bucketName, objectUrlBase);
 
 const sortStore = new SortStore('name', 'asc');
-const directoriesStore = new DirectoriesStore();
+const appStore = new AppStore();
 
 bucketFetcher
   .then(data => treeBuilder(data.Contents))
   .then(({ root, directories }) => {
-    directoriesStore.setDirectories({ root, directories });
+    appStore.setDirectories({ root, directories });
   })
   .catch((err) => {
     console.log(err);
-    directoriesStore.onError();
+    appStore.onError();
   });
 
 const sortClassDeterminator = SortClassDeterminator(
@@ -78,7 +78,7 @@ const sortClassDeterminator = SortClassDeterminator(
 ReactDOM.render(
   <App
     sortStore={sortStore}
-    directoriesStore={directoriesStore}
+    appStore={appStore}
     sortClassDeterminator={sortClassDeterminator}
     searchFilter={searchFilter}
     sortItems={sortItems}

@@ -4,12 +4,12 @@ import App from './components/App';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  const directoriesStore = {
+  const appStore = {
     hasDirectories: false,
     error: false,
     directories: [],
   };
 
-  ReactDOM.render(<App sortStore={{}} directoriesStore={directoriesStore} sortClassDeterminator={jest.fn()} />, div);
+  ReactDOM.render(<App sortStore={{}} appStore={appStore} sortClassDeterminator={jest.fn()} />, div);
   ReactDOM.unmountComponentAtNode(div);
 });

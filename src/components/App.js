@@ -7,7 +7,7 @@ import '../App.css';
 export default @observer class App extends Component {
   static propTypes = {
     sortStore: PropTypes.object,
-    directoriesStore: PropTypes.shape({
+    appStore: PropTypes.shape({
       hasDirectories: PropTypes.bool.isRequired,
       error: PropTypes.bool.isRequired,
       root: PropTypes.object,
@@ -22,26 +22,26 @@ export default @observer class App extends Component {
   render() {
     const {
       sortStore,
-      directoriesStore,
+      appStore,
       sortClassDeterminator,
       searchFilter,
       sortItems,
       basePath,
     } = this.props;
 
-     if (directoriesStore.hasDirectories) {
+     if (appStore.hasDirectories) {
       return (
         <DirectoriesRouter
           sortStore={sortStore}
-          root={directoriesStore.root}
-          directories={directoriesStore.directories}
+          root={appStore.root}
+          directories={appStore.directories}
           sortClassDeterminator={sortClassDeterminator}
           searchFilter={searchFilter}
           sortItems={sortItems}
           basePath={basePath}
         />
       );
-    } else if (directoriesStore.error) {
+    } else if (appStore.error) {
       return <div className="error">Error loading bucket</div>;
     } else {
       return <div className="loading" />;

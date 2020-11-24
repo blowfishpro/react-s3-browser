@@ -8,7 +8,7 @@ describe(App, () => {
     const sortStore = { name: 'sortStore' };
     const root = { key: '/', path: '/' };
     const directories = [{ key: 'dir1', path: '/dir1'}, { key: 'dir1', path: '/dir2' }];
-    const directoriesStore = { hasDirectories: true, error: false, root, directories };
+    const appStore = { hasDirectories: true, error: false, root, directories };
     const sortClassDeterminator = jest.fn();
     const searchFilter = jest.fn();
     const sortItems = jest.fn();
@@ -16,7 +16,7 @@ describe(App, () => {
     const wrapper = shallow(
       <App
         sortStore={sortStore}
-        directoriesStore={directoriesStore}
+        appStore={appStore}
         sortClassDeterminator={sortClassDeterminator}
         searchFilter={searchFilter}
         sortItems={sortItems}
@@ -41,7 +41,7 @@ describe(App, () => {
     const wrapper = shallow(
       <App
         sortStore={{}}
-        directoriesStore={{ hasDirectories: false, error: true, root: null, directories: null }}
+        appStore={{ hasDirectories: false, error: true, root: null, directories: null }}
         sortClassDeterminator={jest.fn()}
       />
     );
@@ -56,7 +56,7 @@ describe(App, () => {
     const wrapper = shallow(
       <App
         sortStore={{}}
-        directoriesStore={{ hasDirectories: false, error: false }}
+        appStore={{ hasDirectories: false, error: false }}
         sortClassDeterminator={jest.fn()}
       />
     );
