@@ -39,5 +39,8 @@ export function fromHostPath({ hostname, pathname }) {
       basePath: '/',
     });
   }
+  if (splitPath.length > 1 && splitPath[1] !== '') {
+    return { bucketName: splitPath[1], forcePathStyle: false, objectUrlBase: `https://${splitPath[1]}.s3.amazonaws.com` };
+  }
   return { bucketName: null, forcePathStyle: false, objectUrlBase: null };
 }

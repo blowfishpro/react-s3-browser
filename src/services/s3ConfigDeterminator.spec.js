@@ -132,5 +132,24 @@ describe('s3ConfigDeterminator', () => {
       expect(bucketName).toBeNull();
       expect(objectUrlBase).toBeNull();
     });
+
+    it('assumes the first path part is the bucket for a generic url', () => {
+      const { bucketName, forcePathStyle, objectUrlBase } = s3ConfigDeterminator.fromHostPath({
+        hostname: 'example.com',
+        pathname: '/my-bucket/some/path',
+      });
+      expect(bucketName).toEqual('my-bucket');
+      expect(forcePathStyle).toBeFalsy();
+      expect(objectUrlBase).toEqual('https://my-bucket.s3.amazonaws.com');
+    });
+
+    it('does not parse the bucket out of an empty path', () => {
+      const { bucketName, objectUrlBase } = s3ConfigDeterminator.fromHostPath({
+        hostname: 'example.com',
+        pathname: '/',
+      });
+      expect(bucketName).toBeNull();
+      expect(objectUrlBase).toBeNull();
+    });
   });
 });
