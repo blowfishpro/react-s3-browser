@@ -39,7 +39,7 @@ if (window.s3Config) {
       { Key: 'foo2/bar2/baz2.file', Size: 4, LastModified: new Date('2000-01-01 00:00:00 +0000') },
       { Key: 'foo2/bar3/baz3.file', Size: 5, LastModified: new Date('2000-01-01 00:00:01 +0000') },
     ];
-    bucketFetcher = new Promise((resolve, reject) => setTimeout(() => resolve({ Contents: data}), 500));
+    bucketFetcher = new Promise((resolve, reject) => setTimeout(() => resolve({ Contents: data }), 500));
   }
 } else {
   let forcePathStyle;
