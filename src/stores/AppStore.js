@@ -3,22 +3,30 @@ import { action, observable, computed, toJS } from 'mobx';
 export default class DirectoriesStore {
   @observable.ref rootObservable = null;
   @observable.ref directoriesObservable = null;
-  @observable error = false;
+  @observable error = null;
 
-  @action setDirectories({ root, directories }) {
+  @action onLoaded({ root, directories }) {
     this.rootObservable = root;
     this.directoriesObservable = directories;
-    this.error = false;
+    this.error = null;
   }
 
-  @action onError() {
+  @action onError(error) {
     this.rootObservable = null;
     this.directoriesObservable = null;
-    this.error = true;
+    this.error = error;
   }
 
-  @computed get hasDirectories() {
+  @computed get isLoading() {
+    return this.error === null && this.directoriesObservable === null;
+  }
+
+  @computed get isLoaded() {
     return this.directoriesObservable !== null;
+  }
+
+  @computed get isError() {
+    return this.error !== null;
   }
 
   @computed get root() {

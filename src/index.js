@@ -61,7 +61,7 @@ const appStore = new AppStore();
 bucketFetcher
   .then(data => treeBuilder(data.Contents))
   .then(({ root, directories }) => {
-    appStore.setDirectories({ root, directories });
+    appStore.onLoaded({ root, directories });
   })
   .catch((err) => {
     console.log(err);

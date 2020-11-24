@@ -8,8 +8,10 @@ export default @observer class App extends Component {
   static propTypes = {
     sortStore: PropTypes.object,
     appStore: PropTypes.shape({
-      hasDirectories: PropTypes.bool.isRequired,
-      error: PropTypes.bool.isRequired,
+      isLoading: PropTypes.bool.isRequired,
+      isLoaded: PropTypes.bool.isRequired,
+      isError: PropTypes.bool.isRequired,
+      error: PropTypes.string,
       root: PropTypes.object,
       directories: PropTypes.array,
     }).isRequired,
@@ -29,7 +31,11 @@ export default @observer class App extends Component {
       basePath,
     } = this.props;
 
-     if (appStore.hasDirectories) {
+    if (appStore.isLoading) {
+      return <div className="loading" />;
+    } else if (appStore.isError) {
+      return <div className="error">Error loading bucket</div>;
+    } else if (appStore.isLoaded) {
       return (
         <DirectoriesRouter
           sortStore={sortStore}
@@ -41,10 +47,8 @@ export default @observer class App extends Component {
           basePath={basePath}
         />
       );
-    } else if (appStore.error) {
-      return <div className="error">Error loading bucket</div>;
     } else {
-      return <div className="loading" />;
+      throw new Error('unreachable state');
     }
   }
 }

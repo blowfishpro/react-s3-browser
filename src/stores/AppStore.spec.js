@@ -3,27 +3,27 @@ import AppStore from './AppStore';
 describe(AppStore, () => {
   it('initializes in the loading state', () => {
     const appStore = new AppStore();
-    expect(appStore.hasDirectories).toBe(false);
-    expect(appStore.root).toBeNull();
-    expect(appStore.directories).toBeNull();
-    expect(appStore.error).toBe(false);
+    expect(appStore.isLoading).toBe(true);
+    expect(appStore.isError).toBe(false);
+    expect(appStore.isLoaded).toBe(false);
   });
 
   it('records when an error happens', () => {
     const appStore = new AppStore();
-    appStore.onError();
-    expect(appStore.hasDirectories).toBe(false);
-    expect(appStore.root).toBeNull();
-    expect(appStore.directories).toBeNull();
-    expect(appStore.error).toBe(true);
+    appStore.onError('an error');
+    expect(appStore.isLoading).toBe(false);
+    expect(appStore.isError).toBe(true);
+    expect(appStore.isLoaded).toBe(false);
+    expect(appStore.error).toEqual('an error');
   });
 
-  it('records when an error happens', () => {
+  it('loads', () => {
     const appStore = new AppStore();
-    appStore.setDirectories({ root: 'root', directories: ['one', 'two'] });
-    expect(appStore.hasDirectories).toBe(true);
+    appStore.onLoaded({ root: 'root', directories: ['one', 'two'] });
+    expect(appStore.isLoading).toBe(false);
+    expect(appStore.isError).toBe(false);
+    expect(appStore.isLoaded).toBe(true);
     expect(appStore.root).toEqual('root');
     expect(appStore.directories).toEqual(['one', 'two']);
-    expect(appStore.error).toBe(false);
   });
 });
