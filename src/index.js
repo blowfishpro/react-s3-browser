@@ -5,7 +5,6 @@ import './index.css';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 import * as s3ConfigDeterminator from './services/s3ConfigDeterminator';
-import s3BucketFetcher from './services/s3BucketFetcher';
 import S3DirectoryListBuilder from './services/S3DirectoryListBuilder';
 import DirectoriesStore from './stores/DirectoriesStore';
 import SortStore from './stores/SortStore';
@@ -25,7 +24,7 @@ let bucketFetcher;
 
 if (bucketName) {
   const s3 = new AWS.S3({ params: { Bucket: bucketName }, s3ForcePathStyle: forcePathStyle });
-  bucketFetcher = s3BucketFetcher(s3);
+  bucketFetcher = s3.makeUnauthenticatedRequest('listObjectsV2').promise();
 } else if (process.env.NODE_ENV !== 'production') {
   console.log('using fake s3 data');
   bucketName = 'example-bucket';
@@ -38,7 +37,7 @@ if (bucketName) {
     { Key: 'foo2/bar2/baz2.file', Size: 4, LastModified: new Date('2000-01-01 00:00:00 +0000') },
     { Key: 'foo2/bar3/baz3.file', Size: 5, LastModified: new Date('2000-01-01 00:00:01 +0000') },
   ];
-  bucketFetcher = new Promise((resolve, reject) => setTimeout(() => resolve(data), 500));
+  bucketFetcher = new Promise((resolve, reject) => setTimeout(() => resolve({ Contents: data}), 500));
 } else {
   throw new Error('Unable to determine s3 bucket');
 }
@@ -49,7 +48,7 @@ const sortStore = new SortStore('name', 'asc');
 const directoriesStore = new DirectoriesStore();
 
 bucketFetcher
-  .then(data => treeBuilder(data))
+  .then(data => treeBuilder(data.Contents))
   .then(({ root, directories }) => {
     directoriesStore.setDirectories({ root, directories });
   })
