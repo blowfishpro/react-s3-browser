@@ -19,11 +19,12 @@ describe(AppStore, () => {
 
   it('loads', () => {
     const appStore = new AppStore();
-    appStore.onLoaded({ root: 'root', directories: ['one', 'two'] });
+    appStore.onLoaded({ root: 'root', directories: ['one', 'two'], basePath: '/some/path' });
     expect(appStore.isLoading).toBe(false);
     expect(appStore.isError).toBe(false);
     expect(appStore.isLoaded).toBe(true);
     expect(appStore.root).toEqual('root');
     expect(appStore.directories).toEqual(['one', 'two']);
+    expect(appStore.basePath).toEqual('/some/path');
   });
 });

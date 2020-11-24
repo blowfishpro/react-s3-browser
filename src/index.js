@@ -61,7 +61,7 @@ const appStore = new AppStore();
 bucketFetcher
   .then(data => treeBuilder(data.Contents))
   .then(({ root, directories }) => {
-    appStore.onLoaded({ root, directories });
+    appStore.onLoaded({ root, directories, basePath });
   })
   .catch((err) => {
     console.log(err);
@@ -82,7 +82,6 @@ ReactDOM.render(
     sortClassDeterminator={sortClassDeterminator}
     searchFilter={searchFilter}
     sortItems={sortItems}
-    basePath={basePath}
   />,
   document.getElementById('root')
 );

@@ -18,7 +18,6 @@ export default @observer class App extends Component {
     sortClassDeterminator: PropTypes.func,
     searchFilter: PropTypes.func,
     sortItems: PropTypes.func,
-    basePath: PropTypes.string,
   }
 
   render() {
@@ -28,7 +27,6 @@ export default @observer class App extends Component {
       sortClassDeterminator,
       searchFilter,
       sortItems,
-      basePath,
     } = this.props;
 
     if (appStore.isLoading) {
@@ -44,7 +42,7 @@ export default @observer class App extends Component {
           sortClassDeterminator={sortClassDeterminator}
           searchFilter={searchFilter}
           sortItems={sortItems}
-          basePath={basePath}
+          basePath={appStore.basePath}
         />
       );
     } else {

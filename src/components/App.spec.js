@@ -8,7 +8,7 @@ describe(App, () => {
     const sortStore = { name: 'sortStore' };
     const root = { key: '/', path: '/' };
     const directories = [{ key: 'dir1', path: '/dir1'}, { key: 'dir1', path: '/dir2' }];
-    const appStore = { isLoading: false, isLoaded: true, isError: false, root, directories };
+    const appStore = { isLoading: false, isLoaded: true, isError: false, root, directories, basePath: '/some/path' };
     const sortClassDeterminator = jest.fn();
     const searchFilter = jest.fn();
     const sortItems = jest.fn();
@@ -20,7 +20,6 @@ describe(App, () => {
         sortClassDeterminator={sortClassDeterminator}
         searchFilter={searchFilter}
         sortItems={sortItems}
-        basePath={basePath}
       />
     );
 
