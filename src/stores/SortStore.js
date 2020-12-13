@@ -1,10 +1,11 @@
-import { action, observable } from 'mobx';
+import { action, observable, makeObservable } from 'mobx';
 
 export default class SortStore {
   @observable sortBy = null;
   @observable sortOrder = 'desc';
 
   constructor(defaultSortBy, defaultSortOrder) {
+    makeObservable(this);
     this.sortBy = defaultSortBy;
     this.defaultSortOrder = defaultSortOrder;
     this.sortOrder = defaultSortOrder;

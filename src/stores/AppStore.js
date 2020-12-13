@@ -1,10 +1,14 @@
-import { action, observable, computed, toJS } from 'mobx';
+import { action, observable, computed, toJS, makeObservable } from 'mobx';
 
 export default class DirectoriesStore {
   @observable.ref rootObservable = null;
   @observable.ref directoriesObservable = null;
   @observable basePath = null;
   @observable error = null;
+
+  constructor() {
+    makeObservable(this);
+  }
 
   @action onLoaded({ root, directories, basePath }) {
     this.rootObservable = root;

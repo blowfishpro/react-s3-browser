@@ -1,3 +1,4 @@
+import { configure } from 'mobx';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import AWS from 'aws-sdk';
@@ -11,6 +12,13 @@ import SortStore from './stores/SortStore';
 import SortClassDeterminator from './services/SortClassDeterminator';
 import searchFilter from './services/searchFilter';
 import sortItems from './services/sortItems';
+
+configure({
+  enforceActions: 'always',
+  computedRequiresReaction: true,
+  reactionRequiresObservable: true,
+  observableRequiresReaction: true,
+});
 
 const sortStore = new SortStore('name', 'asc');
 const appStore = new AppStore();
